@@ -81,7 +81,7 @@ Once you have an optimized circuit to a particular challenge, you can use the sc
 
 ```python
 
-from iquhack_scorer import MoveScorer
+from iquhack_scoring import MoveScorer
 from bloqade import move
 
 # any subrouting that you want to use in your solution

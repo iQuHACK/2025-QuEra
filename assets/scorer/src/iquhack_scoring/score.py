@@ -340,10 +340,17 @@ class Renderer:
         return ani
 
 
+def _default_qasm():
+    return """
+OPENQASM 2.0;
+include "qelib1.inc";
+"""
+
+
 @dataclasses.dataclass(frozen=True)
 class MoveScorer:
     mt: ir.Method
-    expected_qasm: str
+    expected_qasm: str = dataclasses.field(default_factory=_default_qasm)
 
     CZ_COST = 1.0
     LOCAL_COST = 0.5
@@ -484,9 +491,18 @@ class MoveScorer:
         move_analysis_result = self._run_move_analysis()
         return renderer.animate(move_analysis_result, fig, ax)
 
-    def score(self):
-        """Return a dictionary of scores for the method"""
-        self.validate()
+    def score(self, run_validation=True):
+        """Return a dictionary of scores for the method
+
+        Args
+            run_validation: (bool, Optinoal) run validation against the `expected_qasm`, default is True.
+
+        Returns
+            Dict[str, int | float] the score results for the program.
+
+        """
+        if run_validation:
+            self.validate()
         move_analysis_result = self._run_move_analysis()
         move_score = self._score_moves(move_analysis_result)
         gate_store = self._score_gates(move_analysis_result=move_analysis_result)
