@@ -1,10 +1,19 @@
 from bloqade import move
 from iquhack_scoring import MoveScorer
 import math
-#from assets.scorer.src.iquhack_scoring.score import Renderer
 import matplotlib.pyplot as plt
 
 pi = math.pi
+
+@move.vmove()
+def rx(state: move.core.AtomState, indices, theta) -> move.core.AtomState:
+    state = move.LocalXY(atom_state=state,x_exponent=theta,axis_phase_exponent=0,indices=indices)
+    return state
+
+@move.vmove()
+def ry(state: move.core.AtomState, indices, theta) -> move.core.AtomState:
+    state = move.LocalXY(atom_state=state,x_exponent=theta,axis_phase_exponent=-pi/2,indices=indices)
+    return state
 
 @move.vmove()
 def circuit1():
@@ -39,5 +48,5 @@ scorer = MoveScorer(circuit1, expected_qasm)
 print(scorer.score())
 
 ani = scorer.animate()
-ani.save("circuit1.gif")
+ani.save("circuit1.1.gif")
 plt.show()
