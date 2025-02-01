@@ -1,19 +1,7 @@
 from bloqade import move
 from iquhack_scoring import MoveScorer
-import math
-import matplotlib.pyplot as plt
-
-pi = math.pi
-
-@move.vmove()
-def rx(state: move.core.AtomState, indices, theta) -> move.core.AtomState:
-    state = move.LocalXY(atom_state=state,x_exponent=theta,axis_phase_exponent=0,indices=indices)
-    return state
-
-@move.vmove()
-def ry(state: move.core.AtomState, indices, theta) -> move.core.AtomState:
-    state = move.LocalXY(atom_state=state,x_exponent=theta,axis_phase_exponent=-pi/2,indices=indices)
-    return state
+from kirin.passes import aggressive
+from utils import pi, rx, ry, make_gif
 
 @move.vmove()
 def circuit1():
@@ -22,12 +10,12 @@ def circuit1():
     state = move.Init(qubits=[q[0],q[1],q[2]], indices=[0,1,2])
     state.gate[[0, 1, 2]] = move.Move(state.storage[[0, 1, 2]])
     state = move.GlobalCZ(atom_state=state)
-    state = move.LocalXY(atom_state=state,x_exponent=pi/2,axis_phase_exponent=-pi/2,indices=[1])
-    state = move.LocalXY(atom_state=state,x_exponent=pi,axis_phase_exponent=0.,indices=[1])
+    state = ry(state, [1], pi/2)
+    state = rx(state, [1], pi)
     state.gate[[3]] = move.Move(state.gate[[1]])
     state = move.GlobalCZ(atom_state=state)
-    state = move.LocalXY(atom_state=state,x_exponent=pi/2,axis_phase_exponent=-pi/2,indices=[3])
-    state = move.LocalXY(atom_state=state,x_exponent=pi,axis_phase_exponent=0.,indices=[3])
+    state = ry(state, [3], pi/2)
+    state = rx(state, [3], pi)
     move.Execute(state)
 
 expected_qasm = """
@@ -44,9 +32,8 @@ qreg q[3];
 cz q[0],q[1];
 cx q[2],q[1];
 """
+aggressive.Fold(move.vmove)(circuit1)
 scorer = MoveScorer(circuit1, expected_qasm)
 print(scorer.score())
 
-ani = scorer.animate()
-ani.save("circuit1.1.gif")
-plt.show()
+make_gif(scorer, "circuit1.1.gif")
