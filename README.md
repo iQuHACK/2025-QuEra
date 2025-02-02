@@ -14,6 +14,8 @@ Here you will learn all the details needed to operate QuEra resources for iQuHac
   - `qasm`, which contains the QASM representations of the circuits you'll be working with and will be used as the canonical reference for ensuring the circuits you generate are accurate.
   - `scorer` which is the package containing the code that will generate a score based on the code you write (refer to the later section of this document on how to install it into your environment)
   - `QAOA_generator.ipynb` which generates the official QAOA circuit used for one of the challenge statements and which has the proper rotations your generated output should have as well.
+- `team-solutions` which is where your team will put a folder with the solutions you've generated
+  - The `wumbo.md` is a "dummy" file to force git to let the `team-solutions` folder be tracked. DO NOT CHANGE THIS FILE!
 
 
 ## Working on qBraid
@@ -50,16 +52,18 @@ judging. The write-up is a chance for you to be creative in describing your appr
 your process, as well as presenting the performance of your solutions. It should clearly explain the problem, the approaches you used, and your implementation with results
 generated from the scorer script.
 
-Make sure to clearly link the documentation into the `README.md` of your own solutions folder and to include a link to the original challenge repository from the documentation!
+Make sure to either add your write-up to your teams folder (see the Submission section below for specific instructions) or provide a link to it in a `README.md` in the folder mentioned below.
 
 
 ## Submission
 
 To submit the challenge, do the following:
-1. Place all the code you wrote in one folder with your team name under the `team_solutions/` folder (for example `team_solutions/quantum_team`).
-2. Create a new entry in `team_solutions.md` following the format shown that links to the folder with your solution and your documentation. Your solution shuold contain a python script that runs your solution through the scoer and prints the score. Follow the instructions above below on how to use the scorer.
-3. Create a Pull Request from your repository to the original challenge repository
-4. Submit the "challenge submission" form
+1. Place all the code you wrote in one folder with your team name under the `team-solutions/` folder (for example `team_solutions/quantum_team`).
+  - DO NOT MODIFY THE `wumbo.md` file. Please. I beg you! 
+2. Your `quantum_team` folder should contain the following:
+  - An executable script for each circuit you've translated into `bloqade move` that runs the scorer as well. The file name should correspond to the challenge numbers (ex: `1.1py`, `1.2py`, `2.py`, etc.) and should print the output of the scorer.
+  - EITHER a `README.md` that links to wherever your writeup is hosted (please ensure that the write-up is accessible to people not on your team so we can access it!) OR included in the folder
+3. Create a Pull Request from your repository (and the proper branch) to the original challenge repository
 
 Project submission forms will automatically close on Sunday at 10am EST and won't accept late submissions.
 
