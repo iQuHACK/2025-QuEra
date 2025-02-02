@@ -2,6 +2,8 @@ from bloqade import move
 from iquhack_scoring import MoveScorer
 from utils import pi, rx, ry
 
+# The second of the two given circuits in the problem statement is the more optimal one.
+
 @move.vmove()
 def circuit1():
     q = move.NewQubitRegister(3)
