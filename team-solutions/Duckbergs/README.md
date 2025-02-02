@@ -57,6 +57,20 @@ These insights led to the next refinement in our approach:
 <br>
 👉 Instead of optimizing blindly, we structured the search space with predefined constraints, allowing an efficient algorithmic approach.
 
+### 2.3 Optimization Strategy: From Greedy Search to Genetic Algorithms
+
+Once we had extracted hardware-aware constraints, the next challenge was figuring out a better way to initialize gates and move atoms efficiently. This led us to explore algorithmic approaches.
+
+#### 2.3.1 Early Approach: Greedy Search
+
+Our first attempt was a greedy search algorithm, where we iteratively:
+
+1. Selected the best next move based on minimizing swap count.
+2. Prioritized parallel execution of non-conflicting gates.
+3. Reduced circuit depth by identifying mutually commutable operations.
+
+This method was fast but often got stuck in local minima—meaning it sometimes found a good solution, but not the bestone.
+
 ## Circuit implementation
 
 Decomposition of the given circuits into the native gate language of our neutral atom computer was a significant portion of the challenge this year. To ensure that we created accurate, efficient circuits, we followed three tenets for our circuit construction:
