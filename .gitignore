@@ -6,6 +6,7 @@ tests/data/jobs/
 main.html
 debug/
 uv.lock
+.idea
 
 **/flair-python.code-workspace
 
