@@ -20,5 +20,14 @@ However, constructing an efficient circuit was not the only challenge. We also n
 # Challenge Solutions
 
 1. Question 1.1
+   ![1.1](assets/q1.1.png)
 2. Question 1.2
+   ![1.2](assets/q1.2.png)
 3. Question 2
+   ![2](assets/q2.png)
+4. Question 3
+   ![3](assets/q3.png)
+5. Question 4
+   ![4](assets/q4.png)
+6. Question 5
+   ![5](assets/q5.png)
