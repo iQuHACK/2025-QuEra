@@ -19,7 +19,7 @@ However, as we progressed, we encountered several key realizations:
 <br>
 This document outlines our process, key insights, algorithmic choices, and progress toward developing a neutral-atom quantum compiler.
 
-## 2 Compilation Approach: From Idea to Implementation
+## 2. Compilation Approach: From Idea to Implementation
 
 Our work progressed in four major phases, each building on the lessons learned from the previous step.
 
@@ -178,7 +178,7 @@ This systematic approach ensures that optimized circuits can be translated into 
 The technical implementation of IR conversion presented challenges, particularly in dynamically mapping arbitrary circuits to Bloqade’s execution model. While some issues remain unresolved, our current design establishes a clear framework for compiler pipeline development.
 By designing our own IR, we gain flexibility to explore various scheduling, mapping, and routing strategies. This modular approach enables seamless integration with different optimization techniques, making the entire compilation pipeline more adaptable and scalable.
 
-## 3 Circuit implementation
+## 3. Circuit implementation
 
 Decomposition of the given circuits into the native gate language of our neutral atom computer was a significant portion of the challenge this year. To ensure that we created accurate, efficient circuits, we followed three tenets for our circuit construction:
 
@@ -197,7 +197,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
 
 **2. Grouping moves**: Again, time is of the essence when implementing these operations. As such, while moving one atom at a time would be the much easier solution, doing so would be extremely costly for our runtime. As such, we structured our circuit implementations such that we could move many atoms concurrently without them overlapping. For example, if we knew that atom #4 would need to pass to the left over atom #3 to reach its new entangling partner, but atom #3 also needed to change positions, we would structure our circuit so that atom #3’s final destination was also to the left. In this way, we could move atoms #4 and #3 concurrently to reduce movement time.
 
-## 4 Challenge Solutions
+## 4. Challenge Solutions
 
 1. **Question 1.1**<br>
    time: 5.399560555969611<br>
@@ -247,6 +247,6 @@ However, constructing an efficient circuit was not the only challenge. We also n
    overall: 34.40783952039413
    ![5](assets/q5.png)
 
-## 5: Question 3
+## 5. Question 3
 
 Unfortunately, we were unable to validate our solution for question 3. However, we were able to test our circuit when compared to a Qiskit circuit that we determined was identical to the challenge circuit. When we compiled our decomposed circuit in Qiskit and compared it to the target circuit when acting upon a random statevector, we found that they carried out the exact same operation. As such, our circuit for question 3 does successfully carry out the challenge operation.
