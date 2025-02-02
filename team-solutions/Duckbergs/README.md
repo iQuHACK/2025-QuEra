@@ -1,3 +1,41 @@
+# Building a Neutral-Atom Quantum Compiler for Circuit Optimization
+
+### iQuHack 2025 Submission<br>
+
+## 1. Introduction
+
+Quantum computing with neutral-atom processors presents new possibilities due to its reconfigurable connectivity, long coherence times, and native entangling gates. However, optimizing circuits for these systems is significantly more complex than for fixed-layout superconducting qubit architectures.
+<br>
+At the outset, we treated this problem as an opportunity to build a neutral-atom quantum compiler rather than manually optimizing individual circuits. The goal was to create a pipeline that takes any arbitrary quantum circuit and outputs an optimized implementation for neutral-atom hardware, minimizing gate count, execution time, and atom movement while respecting the architectural constraints.
+<br>
+However, as we progressed, we encountered several key realizations:
+
+1. The optimization problem was NP-hard, meaning an exhaustive search was infeasible.
+2. Circuit decomposition held valuable insights, and extracting constraints could reduce the search space.
+3. A structured optimization plan—rather than direct brute-force searching—was necessary for handling movement and scheduling efficiently.
+4. An algorithmic approach emerged as the most effective way to structure optimization, leading to a combination of greedy search and genetic algorithms.
+5. Integration with Bloqade required a well-defined intermediate representation (IR).
+
+<br>
+This document outlines our process, key insights, algorithmic choices, and progress toward developing a neutral-atom quantum compiler.
+
+## 2. Compilation Approach: From Idea to Implementation
+
+Our work progressed in four major phases, each building on the lessons learned from the previous step.
+
+### 2.1 Initial Concept: A Neutral-Atom Quantum Compiler
+
+Our first idea was to create a general-purpose compiler for neutral-atom quantum computers. The goal was simple: Take any quantum circuit and produce an optimized version tailored for neutral-atom execution.<br>
+
+At this stage, we assumed that:
+
+- **Existing quantum compilers** (e.g., Qiskit, Cirq) were not well-adapted to neutral-atom constraints.
+- **A fully automated approach** would yield better results than manual optimization.
+
+However, as we attempted to define our compiler’s behavior, the efficiency bottleneck became evident. The problem was inherently NP-hard, meaning that a naïve brute-force search for the best circuit representation would not scale.
+<br>
+This led to the first major shift in approach: Rather than exhaustively searching for the best circuit, we needed to extract structure from the problem to guide the optimization.
+
 ## Circuit implementation
 
 Decomposition of the given circuits into the native gate language of our neutral atom computer was a significant portion of the challenge this year. To ensure that we created accurate, efficient circuits, we followed three tenets for our circuit construction:
@@ -19,7 +57,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
 
 # Challenge Solutions
 
-1. **Question 1.1**
+1. **Question 1.1**<br>
    time: 5.399560555969611<br>
    ntouches: 4<br>
    nmoves: 2<br>
@@ -27,7 +65,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
    apply_local_xy: 4<br>
    overall: 8.279912111193923
    ![1.1](assets/q1.1.png)
-2. **Question 1.2**
+2. **Question 1.2**<br>
    time: 18.400656362432144<br>
    ntouches: 10<br>
    nmoves: 8<br>
@@ -36,7 +74,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
    apply_local_rz: 2<br>
    overall: 23.180131272486427
    ![1.2](assets/q1.2.png)
-3. **Question 2**
+3. **Question 2**<br>
    time: 7.42558007523081
    ntouches: 6<br>
    nmoves: 3<br>
@@ -48,7 +86,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
 4. **Question 3**
    N/A
    ![3](assets/q3.png)
-5. **Question 4**
+5. **Question 4**<br>
    time: 26.51189099066703<br>
    ntouches: 14<br>
    nmoves: 8<br>
@@ -57,7 +95,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
    apply_cz: 8<br>
    overall: 30.222378198133406
    ![4](assets/q4.png)
-6. **Question 5**
+6. **Question 5**<br>
    time: 21.23919760197064<br>
    ntouches: 17<br>
    nmoves: 7<br>
@@ -66,3 +104,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
    apply_cz: 11<br>
    overall: 34.40783952039413
    ![5](assets/q5.png)
+
+## Question 3
+
+Unfortunately, we were unable to validate our solution for question 3. However, we were able to test our circuit when compared to a Qiskit circuit that we determined was identical to the challenge circuit. When we compiled our decomposed circuit in Qiskit and compared it to the target circuit when acting upon a random statevector, we found that they carried out the exact same operation. As such, our circuit for question 3 does successfully carry out the challenge operation.
