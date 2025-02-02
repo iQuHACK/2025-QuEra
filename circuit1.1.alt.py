@@ -9,12 +9,11 @@ def circuit1():
     state = move.Init(qubits=[q[0],q[1],q[2]], indices=[0,1,2])
     state.gate[[0, 1, 2]] = move.Move(state.storage[[0, 1, 2]])
     state = move.GlobalCZ(atom_state=state)
-    state = move.LocalRz(atom_state=state, phi=pi,indices=[1])
     state = move.LocalXY(atom_state=state, x_exponent=0.5*pi, axis_phase_exponent=-0.5*pi, indices=[1])
     state.gate[[3]] = move.Move(state.gate[[1]])
     state = move.GlobalCZ(atom_state=state)
-    state = move.LocalRz(atom_state=state, phi=pi,indices=[3])
-    state = move.LocalXY(atom_state=state, x_exponent=0.5*pi, axis_phase_exponent=-0.5*pi, indices=[3])
+    state = move.LocalXY(atom_state=state, x_exponent=0.5*pi, axis_phase_exponent=0.5*pi, indices=[3])
+    state = move.LocalRz(atom_state=state, phi=pi,indices=[2])
     move.Execute(state)
 
 expected_qasm = """
