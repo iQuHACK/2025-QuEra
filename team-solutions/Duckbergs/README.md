@@ -250,3 +250,4 @@ However, constructing an efficient circuit was not the only challenge. We also n
 ## 5. Question 3
 
 Unfortunately, we were unable to validate our solution for question 3. However, we were able to test our circuit when compared to a Qiskit circuit that we determined was identical to the challenge circuit. When we compiled our decomposed circuit in Qiskit and compared it to the target circuit when acting upon a random statevector, we found that they carried out the exact same operation. As such, our circuit for question 3 does successfully carry out the challenge operation.
+
