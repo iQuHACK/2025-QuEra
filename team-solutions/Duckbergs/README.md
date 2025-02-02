@@ -55,7 +55,7 @@ Key realizations from this phase:
 
 These insights led to the next refinement in our approach:
 <br>
-👉 Instead of optimizing blindly, we structured the search space with predefined constraints, allowing an efficient algorithmic approach.
+Instead of optimizing blindly, we structured the search space with predefined constraints, allowing an efficient algorithmic approach.
 
 ### 2.3 Optimization Strategy: From Greedy Search to Genetic Algorithms
 
