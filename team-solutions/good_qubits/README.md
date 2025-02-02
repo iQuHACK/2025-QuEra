@@ -27,7 +27,7 @@ meaning when there are more than half local unitaries, it is better to perform t
 
 Second, we make several simplifications to the number of moves between CZ gates. We follow the work in Ruan et al (2024). arxiv.org/2411.12263v1, to convert the partitioning of CZ blocks to a graph-coloring problem. We also find a notable advantage to initializing many of the qubits in a strategic manner in the gate zone, sufficiently spread out, so that we can minimize extraneous transfers to and from the storage zone.
 
-Lastly, we make use of a a graph coloring algorithm to optimize ordering of CZ gates. This method also could form part of an extension to automated compilation methods. 
+Lastly, the graph coloring algorithm is used to optimize ordering of CZ gates. This method also could form part of an extension to automated compilation methods. 
 ## Bloqade.move
 We played a lot with Bloqade.move to try to simplify the process of writing the instruction for circuits. In particular, we tried:
 - Abstracted commonly used subroutines
