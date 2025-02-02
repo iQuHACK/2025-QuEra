@@ -19,7 +19,7 @@ However, as we progressed, we encountered several key realizations:
 <br>
 This document outlines our process, key insights, algorithmic choices, and progress toward developing a neutral-atom quantum compiler.
 
-## 2. Compilation Approach: From Idea to Implementation
+## 2 Compilation Approach: From Idea to Implementation
 
 Our work progressed in four major phases, each building on the lessons learned from the previous step.
 
@@ -71,7 +71,114 @@ Our first attempt was a greedy search algorithm, where we iteratively:
 
 This method was fast but often got stuck in local minima—meaning it sometimes found a good solution, but not the bestone.
 
-## Circuit implementation
+#### 2.3.2 Evolving the Approach: Genetic Algorithms
+
+Recognizing the limitations of greedy search, we moved to a genetic algorithm approach, where:
+
+1. Multiple circuit configurations (population) were generated.
+2. Each candidate was evaluated using a heuristic-based cost function.
+3. The best-performing candidates were selected and evolved over generations.
+
+Heuristics Used for Evaluation
+<br>
+Each candidate was scored based on:
+
+- NCZNCZ​: The number of entangling Controlled-Z operations (since these dominate error rates).
+- NswapNswap​: The number of swap operations needed to rearrange atoms.
+- TexecTexec​: The total execution time based on layered scheduling constraints.
+- NlocalNlocal​: The number of local vs. global rotations (favoring global rotations to reduce control complexity).
+
+Single Qubit Movement Heuristics
+Optimizes where to place individual qubits when moving them into the gate zone.
+
+| Heuristic               | Description                                                                |
+| ----------------------- | -------------------------------------------------------------------------- |
+| Default Movement        | Places qubits in the first available gate position.                        |
+| Most Connected Movement | Chooses a position with the highest number of adjacent connections.        |
+| Cost-Aware Movement     | Selects a position that minimizes movement cost and adjacency constraints. |
+| Random Movement         | Randomly assigns a free gate position.                                     |
+
+---
+
+Two-Qubit Adjacency Heuristics
+Selects optimal positions for qubit pairs used in CZ operations.
+
+| Heuristic             | Description                                                                        |
+| --------------------- | ---------------------------------------------------------------------------------- |
+| Default Adjacency     | Places qubits in the first available adjacent slots.                               |
+| Nearest Adjacency     | Finds the closest adjacent pair with minimal movement cost.                        |
+| Least Interference    | Minimizes interference with other active qubits in the gate zone.                  |
+| Centered Placement    | Places qubits towards the center of the gate zone for equalized movement distance. |
+| Preemptive Adjacency  | Predicts future CZ operations and places qubits accordingly.                       |
+| Load Balancing        | Distributes qubits evenly across the gate zone to prevent congestion.              |
+| Future Entanglement   | Optimizes placement based on future multi-qubit interactions.                      |
+| Minimal Swap Strategy | Ensures qubits move the least possible distance                                    |
+
+By evolving candidate solutions, the genetic algorithm significantly improved circuit efficiency compared to both the greedy search and naive decomposition.Implemented Heuristics
+
+### 2.4 Intermediate Representation & Bloqade Integration
+
+Once the optimization phase produced an improved circuit, the final step was translating it into Bloqade-compatible code.
+One of our team members explored Bloqade’s kernel functions to develop an Intermediate Representation (IR) that:
+
+- Mapped optimized circuits into Bloqade’s gate syntax.
+- Preserved parallel execution optimizations.
+- Ensured compatibility with neutral-atom execution constraints.
+
+This allowed us to test our compiled circuits directly in Bloqade simulations. The following section refers to the compile_to_bloqade.py file found in our submission. Designing this pipeline provides a robust infrastructure for future work in circuit optimization and compilation for neutral-atom systems. By establishing a modular and extensible approach, we enable further improvements in scheduling, routing, and qubit mapping strategies, fostering an adaptable and scalable compilation framework.
+
+### 2.5 IR Design
+
+Our IR is constructed as a dictionary with two key elements:
+
+- position: A list of lists representing qubit positions at each step.
+- operator: A list of tuples specifying operations, their parameters, and whether they are global or local.
+
+Example IR structure:
+
+```python
+ir_code = {
+    "position": [[0,1,2,3],[0,1,50,51],[0,1,50,51],[0,1,50,51],[0,1,50,2],[0,51,50,2]],
+    "operator": [("move", [], True), ("move", [], True), ("rxy", [0,1], False, np.pi/2, np.pi/2),
+                  ("cz", [], True), ("move", [], True), ("move", [], True)]
+}
+```
+
+Each entry in position corresponds to a timestep, and each operation in operator aligns with the same index in position. If the operation is "move", the positions determine the source and destination qubits. If it is a gate operation, the affected qubits are explicitly listed.
+This representation allows efficient encoding of the entire circuit execution at the hardware level while maintaining flexibility for modifications.
+
+### 2.6 Bloqade Circuit Construction
+
+To dynamically construct Bloqade circuits, we implemented an ir_to_bloqade function that interprets the IR and converts it into Bloqade-compatible commands. A key component is move_zone, which handles qubit movement using Bloqade’s move.core.AtomState:
+
+```python
+@move.vmove
+def move_zone(state: move.core.AtomState, from_zone, to_zone, from_index, to_index):
+    state.to_zone[to_index] = move.Move(state.from_zone[from_index])
+    return state
+```
+
+Additionally, we designed a new function that initializes a qubit register and assigns positions:
+
+```python
+def new(num_qubits, positions):
+    qubits = [i for i in range(num_qubits)]
+    @move.vmove
+    def kernel():
+        q = move.NewQubitRegister(num_qubits)
+        state = move.Init(qubits, positions)
+        return state
+    return kernel
+```
+
+This systematic approach ensures that optimized circuits can be translated into Bloqade efficiently while preserving all execution constraints.
+
+### 2.7 Challenges and Future Directions
+
+The technical implementation of IR conversion presented challenges, particularly in dynamically mapping arbitrary circuits to Bloqade’s execution model. While some issues remain unresolved, our current design establishes a clear framework for compiler pipeline development.
+By designing our own IR, we gain flexibility to explore various scheduling, mapping, and routing strategies. This modular approach enables seamless integration with different optimization techniques, making the entire compilation pipeline more adaptable and scalable.
+
+## 3 Circuit implementation
 
 Decomposition of the given circuits into the native gate language of our neutral atom computer was a significant portion of the challenge this year. To ensure that we created accurate, efficient circuits, we followed three tenets for our circuit construction:
 
@@ -90,7 +197,7 @@ However, constructing an efficient circuit was not the only challenge. We also n
 
 **2. Grouping moves**: Again, time is of the essence when implementing these operations. As such, while moving one atom at a time would be the much easier solution, doing so would be extremely costly for our runtime. As such, we structured our circuit implementations such that we could move many atoms concurrently without them overlapping. For example, if we knew that atom #4 would need to pass to the left over atom #3 to reach its new entangling partner, but atom #3 also needed to change positions, we would structure our circuit so that atom #3’s final destination was also to the left. In this way, we could move atoms #4 and #3 concurrently to reduce movement time.
 
-# Challenge Solutions
+## 4 Challenge Solutions
 
 1. **Question 1.1**<br>
    time: 5.399560555969611<br>
@@ -140,6 +247,6 @@ However, constructing an efficient circuit was not the only challenge. We also n
    overall: 34.40783952039413
    ![5](assets/q5.png)
 
-## Question 3
+## 5: Question 3
 
 Unfortunately, we were unable to validate our solution for question 3. However, we were able to test our circuit when compared to a Qiskit circuit that we determined was identical to the challenge circuit. When we compiled our decomposed circuit in Qiskit and compared it to the target circuit when acting upon a random statevector, we found that they carried out the exact same operation. As such, our circuit for question 3 does successfully carry out the challenge operation.
