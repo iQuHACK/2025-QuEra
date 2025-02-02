@@ -36,6 +36,27 @@ However, as we attempted to define our compiler’s behavior, the efficiency bot
 <br>
 This led to the first major shift in approach: Rather than exhaustively searching for the best circuit, we needed to extract structure from the problem to guide the optimization.
 
+### 2.2 Circuit Decomposition: Extracting Insights for Constraints
+
+To tackle the search space complexity, some of our team members focused on analyzing circuit decomposition to gather insights that could constrain the optimization problem.
+<br>
+Key realizations from this phase:
+
+- **Not all decompositions are hardware-efficient:**
+  - Many common decompositions use CNOT-based constructions, which are inefficient for neutral-atom architectures.
+  - Rewriting circuits using Controlled-Z (CZ) gates significantly reduced entangling gate count.
+- **Parallelization opportunities:**
+  - Global operations (e.g., global RzRz​) should be prioritized to reduce local control overhead.
+  - Gate zones limit the number of simultaneous operations, so circuits must be structured accordingly.
+- **Atom movement must be minimized:**
+
+  - Moving qubits excessively between storage and gate zones introduces decoherence and loss.
+  - Optimal gate scheduling should respect neutral-atom constraints before even searching for the best layout.
+
+These insights led to the next refinement in our approach:
+<br>
+👉 Instead of optimizing blindly, we structured the search space with predefined constraints, allowing an efficient algorithmic approach.
+
 ## Circuit implementation
 
 Decomposition of the given circuits into the native gate language of our neutral atom computer was a significant portion of the challenge this year. To ensure that we created accurate, efficient circuits, we followed three tenets for our circuit construction:
