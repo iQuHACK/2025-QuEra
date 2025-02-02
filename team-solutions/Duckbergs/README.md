@@ -1,6 +1,6 @@
 # Building a Neutral-Atom Quantum Compiler for Circuit Optimization
 
-### iQuHack 2025 Submission<br>
+### iQuHack 2025 Submission - Team Duckbergs<br>
 
 ## 1. Introduction
 
