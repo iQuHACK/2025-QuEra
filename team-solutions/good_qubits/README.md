@@ -11,7 +11,6 @@ Second, we make several simplifications to the number of moves between CZ gates.
 
 General transpilation (first compilation):
 
-Hand-tuned complilation (second compilation:
-
+Manual complilation (second compilation):
 
 
