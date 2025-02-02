@@ -36,4 +36,11 @@ We played a lot with Bloqade.move to try to simplify the process of writing the 
 
 ## Problem Solutions
 
-Solutions are located in files named after the problem number (`1.1.py`, `1.2.py`, etc.). Some commonly used utility functions are placed in `utils.py`, and the problem 3 solution (`3.py`) is a dynamically generated script created by `gen_3.py`.
+Solutions are located in files named after the problem number (`1.1.py`, `1.2.py`, etc.). Some commonly used utility functions are placed in `utils.py`, and the problem 3 solution (`3.py`) is a dynamically generated script created by `gen_3.py`. Our scores are as follows:
+
+1.1: 7.81
+1.2: 19.1
+2: 20.61
+3: Valiant effort
+4: 35.3
+5: 39.73
