@@ -20,14 +20,49 @@ However, constructing an efficient circuit was not the only challenge. We also n
 # Challenge Solutions
 
 1. Question 1.1
+   time: 5.399560555969611
+   ntouches: 4
+   nmoves: 2
+   apply_cz: 2
+   apply_local_xy: 4
+   overall: 8.279912111193923
    ![1.1](assets/q1.1.png)
 2. Question 1.2
+   time: 18.400656362432144
+   ntouches: 10
+   nmoves: 8
+   apply_cz: 6
+   apply_local_xy: 9
+   apply_local_rz: 2
+   overall: 23.180131272486427
    ![1.2](assets/q1.2.png)
 3. Question 2
+   time: 7.42558007523081
+   ntouches: 6
+   nmoves: 3
+   apply_local_xy: 6
+   apply_cz: 6
+   apply_global_xy: 6
+   overall: 15.405116015046163
    ![2](assets/q2.png)
 4. Question 3
+   N/A
    ![3](assets/q3.png)
 5. Question 4
+   time: 26.51189099066703
+   ntouches: 14
+   nmoves: 8
+   apply_global_xy: 36
+   apply_local_xy: 10
+   apply_cz: 8
+   overall: 30.222378198133406
    ![4](assets/q4.png)
 6. Question 5
+   time: 21.23919760197064
+   ntouches: 17
+   nmoves: 7
+   apply_global_xy: 28
+   apply_local_xy: 10
+   apply_cz: 11
+   overall: 34.40783952039413
    ![5](assets/q5.png)
